@@ -8,8 +8,20 @@
 
 import Link from 'next/link'
 
+// TypeScript interface for property
+interface Property {
+  id: number;
+  title: string;
+  location: string;
+  price: string;
+  bedrooms: number;
+  bathrooms: number;
+  image: string;
+  featured: boolean;
+}
+
 // Sample featured properties data with real Delta Homes properties
-export const featuredProperties = [
+export const featuredProperties: Property[] = [
   {
     id: 1,
     title: "2 Bedroom Apartment for Rent",
@@ -59,7 +71,7 @@ export default function FeaturedProperties() {
 
         {/* Properties grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredProperties.map((property) => (
+          {featuredProperties.map((property: Property) => (
             
             <div key={property.id} className="group relative overflow-hidden rounded-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-gold/20 hover:-translate-y-2">
               {/* Property image container */}

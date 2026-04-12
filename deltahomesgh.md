@@ -1,0 +1,242 @@
+# 🚀 Real Estate Website Project Brief
+
+**Version:** 3.0  
+**Last updated:** 2026-03-26  
+
+---
+
+## 1. Core Purpose & Goals
+
+### Primary Goals
+- Showcase luxury listings with premium visual presentation.
+- Generate **qualified buyer leads** through strategically placed conversion points.
+- Establish **brand authority and trust** within the luxury real estate market.
+
+### Conversion Strategy
+- Persistent **Call-to-Action (CTA)** buttons (e.g., *Schedule Viewing*, *Request Details*).
+- Contact forms embedded:
+  - Property pages  
+  - Homepage  
+  - Dedicated contact page  How 
+- Optional **sticky contact button** for mobile users.
+- Emphasis on **exclusivity messaging** (e.g., “Private Listings”, “By Appointment Only”).
+
+---
+
+## 2. Listings Management
+
+- Manual property upload via CMS (no IDX/MLS integration).
+- Each property includes:
+  - Title
+  - Slug (SEO-friendly URL)
+  - Price
+  - Location
+  - Bedrooms / Bathrooms
+  - Land size
+  - Description
+  - Image gallery (support for multiple images, lightbox preview)
+  - Featured flag
+  - Status (Available / Sold / Pending)
+- Sold/pending properties remain visible but display a clear badge and disable inquiry forms (or show “Sold – similar properties available” message).
+- Image optimization handled automatically (Next.js Image component or CMS CDN).
+
+---
+
+## 3. Functionality & Features
+
+### Property Search
+- Filters:
+  - Location (text-based, future-ready for map integration)
+  - Price range
+  - Bedrooms
+  - Land size  
+- Results:
+  - Grid/list toggle
+  - Sort options (Price, Newest)
+  - Pagination (e.g., 9 properties per page)
+
+### Forms & Lead Capture
+- Property inquiry form (on property detail page)
+- General contact form (global)
+- All forms:
+  - Connected to CRM via API/webhook
+  - Include spam protection (reCAPTCHA v3)
+  - Send email notification to the team as backup (optional but recommended)
+- Form validation with user-friendly error messages.
+
+---
+
+## 4. Team Structure
+
+- 2–5 agents
+- Each agent profile includes:
+  - Name
+  - Photo
+  - Bio
+  - Contact details (email, phone, optional social links)
+  - Associated listings (can be a future enhancement)
+
+---
+
+## 5. Content & SEO Strategy
+
+### SEO Foundations
+- Meta tags (title, description, Open Graph for social sharing)
+- XML sitemap (auto-generated)
+- Robots.txt
+
+### Advanced SEO (Critical)
+- Structured data (Schema.org) for:
+  - Real estate listings
+  - Local business (company)
+  - Person (agents)
+- Location-based keyword targeting (e.g., “Luxury homes in Accra”)
+- Clean URL structure (`/properties/[slug]`, `/agents/[slug]`)
+
+### Blog Strategy
+- Categories (e.g., Market Insights, Buying Guides)
+- SEO-optimized posts with author and date
+- Internal linking to listings and agents
+- Existing blog posts, neighborhood guides, and market reports to be migrated via CMS import or manual entry.
+
+---
+
+## 6. Analytics & Tracking
+
+- Integration with:
+  - Google Analytics (GA4)
+  - Google Search Console
+- Optional:
+  - Meta Pixel (for retargeting ads)
+- Track:
+  - Form submissions (as conversions)
+  - Page views
+  - Click events on CTAs
+
+---
+
+## 7. Branding & Design
+
+- Colors:
+  - Gold (#C5A028)
+  - Black (#000000)
+- Style:
+  - Minimalist luxury aesthetic
+  - Strong typography
+  - Image-first layouts
+
+### UX Enhancements
+- Skeleton loaders (for listings)
+- Empty states (e.g., “No properties found” with suggested actions)
+- Smooth transitions/animations
+- Mobile-first responsive design
+
+---
+
+## 8. Technical Architecture
+
+- **Frontend:** Next.js (App Router) – for SEO and performance
+- **CMS:** Sanity / Contentful / Strapi (headless)
+- **Hosting:** Vercel (production) with automatic preview deployments from Git
+- **Image Handling:** CDN optimization, lazy loading, responsive sizes
+- **Forms:** API routes or serverless functions that validate, send to CRM, and optionally email
+
+### Environment & Deployment
+- Separate environments: development, staging, production
+- Environment variables for API keys, CRM endpoints, reCAPTCHA keys
+- Git repository with main branch protected, PR previews enabled
+
+### Performance Targets
+- Lighthouse score ≥ 90 (desktop & mobile)
+- First Contentful Paint < 2s
+- Largest Contentful Paint < 2.5s
+- Optimized images (WebP conversion, proper sizing)
+
+---
+
+## 9. Security & Compliance
+
+- HTTPS enforced (Vercel provides SSL)
+- reCAPTCHA v3 on all forms
+- Privacy Policy and Terms of Use pages – content to be provided or generated (assistance needed)
+- Secure API handling (no exposed keys, secrets stored in environment variables)
+- Input sanitization to prevent injection attacks
+
+---
+
+## 10. Accessibility (WCAG 2.1 AA)
+- Semantic HTML structure
+- Keyboard navigable (focus indicators, skip to content)
+- Sufficient color contrast (gold on black must meet WCAG contrast requirements – verify and adjust if needed)
+- Alt text for images (CMS field for alt text on each image)
+- ARIA labels where necessary
+
+---
+
+## 11. Testing & Quality Assurance
+
+- Cross-browser testing: Chrome, Firefox, Safari, Edge (desktop & mobile)
+- Responsive testing on real devices or browser DevTools
+- Form submission testing (including spam protection)
+- Broken link checking
+- Performance testing via Lighthouse and WebPageTest
+- Accessibility audit using axe or Lighthouse
+
+---
+
+## 12. Timeline (6-Day Sprint)
+
+| Day | Activities |
+|-----|------------|
+| **Day 1** | Setup: Git repo, CMS schemas (Properties, Agents, Blog), wireframes/mockups approval, environment variables |
+| **Day 2–3** | Core development: Homepage, listings grid, property detail, agent profiles, blog, contact page, forms |
+| **Day 4** | CRM integration, content population (placeholder images + provided text), form testing, SEO basics |
+| **Day 5** | QA, cross-browser testing, performance optimization, accessibility fixes, final content review |
+| **Day 6** | Deployment to production, domain setup, final testing, client handover & CMS training |
+
+---
+
+## 13. Post-Launch & Handover
+
+- **Client training:** 1-hour video session covering how to add/edit properties, blog posts, and agents via CMS.
+- **Documentation:** Written guide (PDF) with screenshots of CMS workflows.
+- **Support period:** 7 days after launch for critical bug fixes (does not include new features).
+- **Backup & recovery:** CMS is cloud-hosted (managed by provider); code repository is on Git; no additional backups required initially.
+- **Error monitoring:** Optional integration with Sentry for runtime error tracking (can be added post-launch).
+
+---
+
+## 14. Future Enhancements (Post-Launch)
+
+- Map-based property search
+- Virtual tours / video integration
+- Saved listings (user accounts)
+- Advanced filtering (price sliders, amenities)
+- AI-powered recommendations
+- Email marketing integration (e.g., Mailchimp)
+- Multi-language support (if needed)
+
+---
+
+## 15. Notes & Constraints
+
+- Strict adherence to scope due to 6-day timeline.
+- Placeholder imagery will be used initially; client must provide final images later for replacement.
+- Client responsible for ongoing content creation, SEO growth, and updating property statuses.
+- Legal copy (Privacy Policy, Terms) will be generated using a standard template; client should review and customize.
+
+---
+
+## 16. Next Steps
+
+1. **Confirm CRM** – provide API endpoint or webhook URL, plus any required authentication.
+2. **Provide brand assets** – logo (SVG/PNG), exact gold colour hex code.
+3. **Deliver existing content** – blog posts (in Word/Google Docs or CSV), agent bios, and any market reports.
+4. **Register domain** – decide name and registrar; share access if needed.
+5. **Approve design mockups** – wireframes to be delivered within first 24 hours.
+6. **Finalize CMS schema** – confirm property fields, agent fields, blog fields.
+7. **Set up analytics accounts** – Google Analytics GA4 property ID.
+
+---
+
+*This document serves as the single source of truth. Any scope changes must be agreed upon in writing and will affect timeline/budget.*

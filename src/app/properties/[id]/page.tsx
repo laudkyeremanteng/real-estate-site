@@ -17,12 +17,27 @@ import Footer from '@/components/Footer'
 // Import featured properties data to sync with homepage
 import { featuredProperties } from '@/components/FeaturedProperties'
 
+// TypeScript interface for property
+interface Property {
+  id: number;
+  title: string;
+  location: string;
+  price: string;
+  bedrooms: number;
+  bathrooms: number;
+  image: string;
+  featured: boolean;
+}
+
 // Property details page component
 export default function PropertyDetailsPage() {
   const params = useParams()
   
+  // Add null check for params.id
+  const id = params.id ? parseInt(params.id as string) : null
+  
   // Find property by ID from featured properties
-  const property = featuredProperties.find((p) => p.id === parseInt(params.id as string))
+  const property = id ? featuredProperties.find((p: Property) => p.id === id) : null
   
   if (!property) {
     return (

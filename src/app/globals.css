@@ -1,0 +1,315 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =================================================================
+/* GLOBAL STYLES - Delta Homes Gh Real Estate Website
+/* =================================================================
+/* Purpose: Global styles, fonts, and animations
+/* Contains: Font imports, CSS variables, utility classes, animations
+/* Used by: All components and pages
+/* =================================================================
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* CSS Variables for Design System */
+:root {
+  --gold: #D4AF37;
+  --gold-light: #F4E5C2;
+  --black: #000000;
+  --gray-900: #111827;
+  --gray-800: #1F2937;
+  --gray-700: #374151;
+  --gray-600: #4B5563;
+  
+  /* Strategic Font System for Delta Homes Gh */
+  --font-primary: 'Inter', sans-serif;      /* Modern, clean luxury feel */
+  --font-secondary: 'Roboto', sans-serif;   /* Professional, highly readable */
+  --font-accent: 'Poppins', sans-serif;    /* Elegant, attention-grabbing */
+  --font-heading: 'Plus Jakarta Sans', sans-serif; /* Brand consistency */
+  --font-body: 'DM Sans', sans-serif;        /* Current body font */
+}
+
+/* CSS Variables for Design System */
+:root {
+  --gold: #D4AF37;
+  --gold-light: #F4E5C2;
+  --black: #000000;
+  --gray-900: #111827;
+  --gray-800: #1F2937;
+  --gray-700: #374151;
+  --gray-600: #4B5563;
+}
+
+/* Base Body Styles */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--black);
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+/* Font Utility Classes */
+.font-heading {
+  font-family: var(--font-heading);  /* Plus Jakarta Sans - Brand consistency */
+}
+
+.font-body {
+  font-family: var(--font-body);        /* DM Sans - Current body font */
+}
+
+.font-luxury {
+  font-family: var(--font-primary);      /* Inter - Modern, clean luxury feel */
+}
+
+.font-professional {
+  font-family: var(--font-secondary);   /* Roboto - Professional, highly readable */
+}
+
+.font-elegant {
+  font-family: var(--font-accent);    /* Poppins - Elegant, attention-grabbing */
+}
+
+/* Professional Text Styling */
+.text-shadow-xl {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.text-shadow-lg {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Luxury Heading Styles */
+.luxury-heading {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Luxury Gradient */
+.luxury-gradient {
+  background: linear-gradient(135deg, var(--gold) 0%, #d4af37 100%);
+}
+
+/* Text Gold */
+.text-gold {
+  color: var(--gold);
+}
+
+/* Background Gold */
+.bg-gold {
+  background-color: var(--gold);
+}
+
+/* Border Gold */
+.border-gold {
+  border-color: var(--gold);
+}
+
+.font-body {
+  font-family: 'DM Sans', sans-serif;
+}
+
+.font-alternate {
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Professional text styling */
+.text-shadow-lg {
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.text-shadow-xl {
+  text-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Luxury heading styles */
+.heading-luxury {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Professional body text */
+.body-professional {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* =================================================================
+/* ANIMATIONS - Delta Homes Gh Real Estate Website
+/* =================================================================
+/* Purpose: Smooth animations and transitions
+/* Contains: Slide-in animations, hover effects, scroll-triggered animations
+/* Used by: Various components for enhanced UX
+/* =================================================================
+
+/* Left-to-Right Slide Animation (Scroll Triggered) */
+@keyframes slideInFromLeftOnScroll {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Scroll-triggered slide-in animation class */
+.text-slide-in-on-scroll {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all 1s ease-out;
+  font-style: italic; /* Make text italic/slanted */
+}
+
+/* When element is visible (triggered by scroll) */
+.text-slide-in-on-scroll.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Letter-by-letter typewriter animation for "Let's Connect" text */
+@keyframes typewriterLetter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Typing cursor effect */
+@keyframes blink {
+  0%, 50% {
+    border-color: transparent;
+  }
+  51%, 100% {
+    border-color: white;
+  }
+}
+
+/* Letter-by-letter typewriter effect for white text */
+.typewriter-white {
+  overflow: hidden;
+  border-right: 2px solid white;
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.1em;
+  animation: 
+    typewriterLetter 3s steps(20, end) forwards,
+    blink 0.75s step-end infinite;
+  font-style: italic; /* Make text italic/slanted */
+}
+
+/* Letter-by-letter typewriter effect for gold text */
+.typewriter-gold {
+  overflow: hidden;
+  border-right: 2px solid var(--gold);
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.1em;
+  animation: 
+    typewriterLetter 3s steps(20, end) forwards 0.3s,
+    blink 0.75s step-end infinite;
+  font-style: italic; /* Make text italic/slanted */
+}
+
+/* Hide cursor after typing completes */
+.typewriter-white.typing-complete,
+.typewriter-gold.typing-complete {
+  border-right: none;
+}
+
+/* Individual letter animation for more realistic typing */
+.letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px) scale(0.8);
+  animation: letterAppear 0.2s ease-out forwards;
+}
+
+/* Stagger letter appearances - slower speed */
+.letter:nth-child(1) { animation-delay: 0.0s; }  /* L */
+.letter:nth-child(2) { animation-delay: 0.2s; }  /* e */
+.letter:nth-child(3) { animation-delay: 0.4s; }  /* t */
+.letter:nth-child(4) { animation-delay: 0.6s; }  /* ' */
+.letter:nth-child(5) { animation-delay: 0.8s; }  /* s */
+.letter:nth-child(6) { animation-delay: 1.0s; }  /* C */
+.letter:nth-child(7) { animation-delay: 1.2s; }  /* o */
+.letter:nth-child(8) { animation-delay: 1.4s; }  /* n */
+.letter:nth-child(9) { animation-delay: 1.6s; }  /* n */
+.letter:nth-child(10) { animation-delay: 1.8s; }  /* e */
+.letter:nth-child(11) { animation-delay: 2.0s; }  /* c */
+.letter:nth-child(12) { animation-delay: 2.2s; }  /* t */
+
+/* Better letter appearance animation */
+@keyframes letterAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8) rotateX(-15deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(5px) scale(0.95) rotateX(-5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+  }
+}
+
+/* Original slide-in animation (for reference) */
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideInFromLeft 1s ease-out forwards;
+}
+
+/* Smooth transitions for all interactive elements */
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effects for luxury feel */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+}
+
+/* Gold glow effect */
+.gold-glow {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

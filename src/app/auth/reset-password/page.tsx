@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -9,22 +9,52 @@ import { updatePassword } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 
 export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordForm />
+    </Suspense>
+  )
+}
+
+function ResetPasswordForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [tokenValid, setTokenValid] = useState(false)
 
   useEffect(() => {
-    // Check if user has a valid session (from the reset link)
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        router.push('/auth/forgot-password')
-      }
-    })
-  }, [router])
+    // Extract access token from URL parameters
+    const accessToken = searchParams.get('access_token')
+    
+    if (accessToken) {
+      // Set the session using the access token from the reset link
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: searchParams.get('refresh_token') || '',
+      }).then(({ data, error }) => {
+        if (error) {
+          console.error('Error setting session:', error)
+          setError('Invalid or expired reset link')
+        } else {
+          setTokenValid(true)
+        }
+      })
+    } else {
+      // Check if user already has a valid session
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+          setTokenValid(true)
+        } else {
+          setError('Invalid or expired reset link')
+        }
+      })
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,6 +82,53 @@ export default function ResetPasswordPage() {
       // Password updated successfully, redirect to login
       router.push('/auth/login?reset=success')
     }
+  }
+
+  if (error && !tokenValid) {
+    return (
+      <div className="min-h-screen bg-black">
+        <Header />
+        <div className="pt-24 pb-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-md mx-auto">
+              <div className="bg-gray-900 rounded-xl p-8 border border-gold/20">
+                <h1 className="text-3xl font-heading font-bold text-white mb-2">
+                  Invalid Reset Link
+                </h1>
+                <p className="text-gray-400 mb-6">
+                  {error}
+                </p>
+                <Link
+                  href="/auth/forgot-password"
+                  className="block w-full bg-gold text-black py-3 font-body font-semibold hover:bg-yellow-500 transition-colors rounded-lg text-center"
+                >
+                  Request New Reset Link
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (!tokenValid) {
+    return (
+      <div className="min-h-screen bg-black">
+        <Header />
+        <div className="pt-24 pb-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-md mx-auto">
+              <div className="bg-gray-900 rounded-xl p-8 border border-gold/20">
+                <div className="text-center text-gray-400">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
   }
 
   return (

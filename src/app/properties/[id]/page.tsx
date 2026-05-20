@@ -22,12 +22,13 @@ interface Property {
   title: string;
   location: string;
   price: number;
-  bedrooms: number;
-  bathrooms: number;
+  currency?: string;
   description: string;
   image_url: string;
   media_urls?: string[];
   status: string;
+  whatsapp?: string;
+  phone?: string;
 }
 
 // Property details page component
@@ -74,21 +75,13 @@ export default function PropertyDetailsPage() {
         <div className="text-center">
           <h1 className="text-4xl font-heading font-bold mb-4">Property Not Found</h1>
           <p className="text-gray-300 mb-8">The property you're looking for doesn't exist.</p>
-          <Link href="/search" className="bg-gold text-black px-6 py-3 rounded-lg font-body font-semibold hover:bg-yellow-500 transition-colors">
+          <Link href="/properties" className="bg-gold text-black px-6 py-3 rounded-lg font-body font-semibold hover:bg-yellow-500 transition-colors">
             View All Properties
           </Link>
         </div>
       </main>
     )
   }
-
-  const features = [
-    `${property.bedrooms} Spacious Bedrooms`,
-    `${property.bathrooms} Bathrooms`,
-    "Modern Kitchen",
-    "24/7 Security",
-    "Parking Space"
-  ]
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -129,15 +122,6 @@ export default function PropertyDetailsPage() {
                     className="w-full h-96 object-cover rounded-lg"
                   />
                 )}
-                
-                {/* Media info */}
-                <div className="mt-4 p-4 bg-gray-900 rounded-lg">
-                  <h3 className="text-gold font-heading font-semibold mb-2">Property Media</h3>
-                  <p className="text-gray-300 font-body text-sm">
-                    View this beautiful {property.bedrooms}-bedroom property located in {property.location}.
-                    {property.media_urls && property.media_urls.length > 0 && ` (${property.media_urls.length} media items)`}
-                  </p>
-                </div>
               </div>
             </div>
             
@@ -150,7 +134,7 @@ export default function PropertyDetailsPage() {
                 </h1>
                 <div className="flex items-center gap-4 mb-4">
                   <span className="text-3xl font-heading font-bold text-gold">
-                    GHS {property.price.toLocaleString()}
+                    {property.currency === 'USD' ? '$' : 'GHS '} {property.price.toLocaleString()}
                   </span>
                   <span className="text-gray-400 font-body">
                     {property.location}
@@ -167,18 +151,6 @@ export default function PropertyDetailsPage() {
                 </div>
               </div>
               
-              {/* Property specifications */}
-              <div className="mb-6 grid grid-cols-2 gap-4">
-                <div className="bg-gray-900 p-4 rounded-lg">
-                  <h3 className="text-gold font-heading font-semibold mb-2">Bedrooms</h3>
-                  <p className="text-2xl font-heading font-bold">{property.bedrooms}</p>
-                </div>
-                <div className="bg-gray-900 p-4 rounded-lg">
-                  <h3 className="text-gold font-heading font-semibold mb-2">Bathrooms</h3>
-                  <p className="text-2xl font-heading font-bold">{property.bathrooms}</p>
-                </div>
-              </div>
-              
               {/* Property description */}
               <div className="mb-6">
                 <h2 className="text-2xl font-heading font-bold text-gold mb-4">Description</h2>
@@ -187,25 +159,18 @@ export default function PropertyDetailsPage() {
                 </p>
               </div>
               
-              {/* Property features */}
-              <div className="mb-6">
-                <h2 className="text-2xl font-heading font-bold text-gold mb-4">Features</h2>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {features.map((feature, index) => (
-                    <li key={index} className="flex items-center text-gray-300 font-body">
-                      <svg className="w-5 h-5 text-gold mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
               {/* Call to action buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="flex-1 border-2 border-gold text-gold px-6 py-3 font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg">
-                  Contact Agent
+                <button 
+                  onClick={() => {
+                    const message = `I am interested in the property: ${property.title}\n\nLocation: ${property.location}\nPrice: ${property.currency === 'USD' ? '$' : 'GHS '}${property.price.toLocaleString()}\n\nPlease provide more information.`
+                    const cleanNumber = property.whatsapp?.replace(/[^0-9]/g, '') || ''
+                    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`
+                    window.open(whatsappUrl, '_blank')
+                  }}
+                  className="flex-1 border-2 border-gold text-gold px-6 py-3 font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg"
+                >
+                  Contact Agent via WhatsApp
                 </button>
               </div>
             </div>

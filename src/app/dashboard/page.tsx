@@ -106,23 +106,23 @@ export default function DashboardPage() {
       <Header />
       <div className="pt-24 pb-20">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-4xl font-heading font-bold text-white mb-2">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div className="w-full md:w-auto">
+              <h1 className="text-2xl md:text-4xl font-heading font-bold text-white mb-2">
                 Agent Dashboard
               </h1>
               <p className="text-gray-400">Welcome, {agent?.name}</p>
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 w-full md:w-auto">
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
-                className="bg-gold text-black px-6 py-3 font-body font-semibold hover:bg-yellow-500 transition-colors rounded-lg"
+                className="w-full sm:w-auto bg-gold text-black px-6 py-3 font-body font-semibold hover:bg-yellow-500 transition-colors rounded-lg"
               >
                 {showAddForm ? 'Cancel' : 'Add Property'}
               </button>
               <button
                 onClick={handleLogout}
-                className="border border-gold text-gold px-6 py-3 font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg"
+                className="w-full sm:w-auto border border-gold text-gold px-6 py-3 font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg"
               >
                 Logout
               </button>
@@ -222,9 +222,10 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
     title: property?.title || '',
     location: property?.location || '',
     price: property?.price || '',
-    bedrooms: property?.bedrooms || '',
-    bathrooms: property?.bathrooms || '',
+    currency: property?.currency || 'GHS',
     description: property?.description || '',
+    whatsapp: property?.whatsapp || '',
+    phone: property?.phone || '',
   })
   const [mediaFiles, setMediaFiles] = useState<File[]>([])
   const [loading, setLoading] = useState(false)
@@ -265,9 +266,10 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
       title: formData.title,
       location: formData.location,
       price: parseFloat(formData.price),
-      bedrooms: parseInt(formData.bedrooms),
-      bathrooms: parseInt(formData.bathrooms),
+      currency: formData.currency,
       description: formData.description,
+      whatsapp: formData.whatsapp,
+      phone: formData.phone,
       media_urls: mediaUrls.length > 0 ? mediaUrls : property?.media_urls || [],
       image_url: mediaUrls.length > 0 ? mediaUrls[0] : property?.image_url || '',
       agent_id: agentId,
@@ -319,7 +321,7 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-white font-body mb-2">Price (GHS)</label>
+          <label className="block text-white font-body mb-2">Price</label>
           <input
             type="number"
             required
@@ -329,25 +331,16 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
           />
         </div>
         <div>
-          <label className="block text-white font-body mb-2">Bedrooms</label>
-          <input
-            type="number"
-            required
-            value={formData.bedrooms}
-            onChange={(e) => setFormData({ ...formData, bedrooms: e.target.value })}
+          <label className="block text-white font-body mb-2">Currency</label>
+          <select
+            value={formData.currency}
+            onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
             className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
-          />
+          >
+            <option value="GHS">GHS</option>
+            <option value="USD">$</option>
+          </select>
         </div>
-      </div>
-      <div>
-        <label className="block text-white font-body mb-2">Bathrooms</label>
-        <input
-          type="number"
-          required
-          value={formData.bathrooms}
-          onChange={(e) => setFormData({ ...formData, bathrooms: e.target.value })}
-          className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
-        />
       </div>
       <div>
         <label className="block text-white font-body mb-2">Description</label>
@@ -357,6 +350,28 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body h-32"
         />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-white font-body mb-2">WhatsApp Number</label>
+          <input
+            type="tel"
+            value={formData.whatsapp}
+            onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+            className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
+            placeholder="+233..."
+          />
+        </div>
+        <div>
+          <label className="block text-white font-body mb-2">Phone Number</label>
+          <input
+            type="tel"
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
+            placeholder="+233..."
+          />
+        </div>
       </div>
       <div>
         <label className="block text-white font-body mb-2">Property Media (Images & Videos)</label>

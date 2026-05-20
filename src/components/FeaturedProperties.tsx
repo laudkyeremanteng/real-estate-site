@@ -18,8 +18,7 @@ interface Property {
   title: string;
   location: string;
   price: number;
-  bedrooms: number;
-  bathrooms: number;
+  currency?: string;
   image_url: string;
   media_urls?: string[];
   status: string;
@@ -103,22 +102,17 @@ export default function FeaturedProperties() {
                   {/* Price display */}
                   <div className="mb-4">
                     <span className="text-xl font-heading font-bold text-gold">
-                      GHS {property.price.toLocaleString()}
+                      {property.currency === 'USD' ? '$' : 'GHS '} {property.price.toLocaleString()}
                     </span>
                   </div>
 
-                  {/* Action buttons */}
-                  <div className="flex space-x-3">
-                    <Link 
-                      href={`/properties/${property.id}`}
-                      className="flex-1 bg-gold text-black py-2 text-sm font-body font-semibold hover:bg-yellow-500 transition-colors rounded-lg text-center"
-                    >
-                      View Details
-                    </Link>
-                    <button className="flex-1 border border-gold text-gold py-2 text-sm font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg">
-                      Quick Tour
-                    </button>
-                  </div>
+                  {/* Action button */}
+                  <Link 
+                    href={`/properties/${property.id}`}
+                    className="block w-full bg-gold text-black py-2 text-sm font-body font-semibold hover:bg-yellow-500 transition-colors rounded-lg text-center"
+                  >
+                    View Details
+                  </Link>
                 </div>
               </div>
             ))}
@@ -128,7 +122,7 @@ export default function FeaturedProperties() {
         {/* View all properties link */}
         <div className="text-center mt-12">
           <Link 
-            href="/search" 
+            href="/properties" 
             className="inline-flex items-center text-gold hover:text-yellow-500 transition-colors font-body font-semibold"
           >
             View All Properties

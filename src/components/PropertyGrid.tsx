@@ -10,8 +10,7 @@ interface Property {
   title: string;
   location: string;
   price: number;
-  bedrooms: number;
-  bathrooms: number;
+  currency?: string;
   description: string;
   image_url: string;
   media_urls?: string[];
@@ -78,25 +77,18 @@ export default function PropertyGrid() {
         </h3>
         <p className="text-gray-400 font-body mb-4">{property.location}</p>
         
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-2xl font-heading font-bold text-gold">GHS {property.price.toLocaleString()}</span>
-          <div className="flex space-x-4 text-sm text-gray-400 font-body">
-            <span>{property.bedrooms} beds</span>
-            <span>{property.bathrooms} baths</span>
-          </div>
+        <div className="mb-4">
+          <span className="text-2xl font-heading font-bold text-gold">
+            {property.currency === 'USD' ? '$' : 'GHS '} {property.price.toLocaleString()}
+          </span>
         </div>
 
-        <div className="flex space-x-3">
-          <Link 
-            href={`/properties/${property.id}`}
-            className="flex-1 bg-gold text-black py-2 font-body font-semibold text-center hover:bg-yellow-500 transition-colors rounded-lg"
-          >
-            View Details
-          </Link>
-          <button className="flex-1 border border-gold text-gold py-2 font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg">
-            Schedule Tour
-          </button>
-        </div>
+        <Link 
+          href={`/properties/${property.id}`}
+          className="block w-full bg-gold text-black py-2 font-body font-semibold text-center hover:bg-yellow-500 transition-colors rounded-lg"
+        >
+          View Details
+        </Link>
       </div>
     </div>
   )
@@ -122,25 +114,18 @@ export default function PropertyGrid() {
               <p className="text-gray-300 font-body text-sm mb-4">{property.description}</p>
             </div>
             <div className="text-right">
-              <span className="text-2xl font-heading font-bold text-gold block mb-2">GHS {property.price.toLocaleString()}</span>
-              <div className="text-sm text-gray-400 font-body">
-                <span>{property.bedrooms} beds</span>
-                <span> • {property.bathrooms} baths</span>
-              </div>
+              <span className="text-2xl font-heading font-bold text-gold block mb-2">
+                {property.currency === 'USD' ? '$' : 'GHS '} {property.price.toLocaleString()}
+              </span>
             </div>
           </div>
 
-          <div className="flex space-x-3">
-            <Link 
-              href={`/properties/${property.id}`}
-              className="flex-1 bg-gold text-black py-2 font-body font-semibold text-center hover:bg-yellow-500 transition-colors rounded-lg"
-            >
-              View Details
-            </Link>
-            <button className="flex-1 border border-gold text-gold py-2 font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg">
-              Schedule Tour
-            </button>
-          </div>
+          <Link 
+            href={`/properties/${property.id}`}
+            className="block w-full bg-gold text-black py-2 font-body font-semibold text-center hover:bg-yellow-500 transition-colors rounded-lg"
+          >
+            View Details
+          </Link>
         </div>
       </div>
     </div>

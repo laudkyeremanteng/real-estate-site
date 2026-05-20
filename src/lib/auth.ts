@@ -80,8 +80,12 @@ export async function getCurrentAgent() {
 
 // Request password reset email
 export async function resetPassword(email: string) {
+  const redirectUrl = process.env.NEXT_PUBLIC_SITE_URL 
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`
+    : `${window.location.origin}/auth/reset-password`
+  
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/auth/reset-password`,
+    redirectTo: redirectUrl,
   })
 
   if (error) {

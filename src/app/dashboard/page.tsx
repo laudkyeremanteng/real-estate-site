@@ -34,13 +34,29 @@ export default function DashboardPage() {
   }, [])
 
   const checkAuth = async () => {
-    const currentAgent = await getCurrentAgent()
-    if (!currentAgent) {
-      router.push('/auth/login')
-      return
+    try {
+      // Check if session is valid
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      
+      if (sessionError || !session) {
+        // No valid session, redirect to homepage
+        router.push('/')
+        return
+      }
+
+      const currentAgent = await getCurrentAgent()
+      if (!currentAgent) {
+        // Session exists but agent not found, redirect to homepage
+        router.push('/')
+        return
+      }
+      
+      setAgent(currentAgent)
+      fetchProperties(currentAgent.id)
+    } catch (error) {
+      console.error('Auth check error:', error)
+      router.push('/')
     }
-    setAgent(currentAgent)
-    fetchProperties(currentAgent.id)
   }
 
   const fetchProperties = async (agentId: string) => {

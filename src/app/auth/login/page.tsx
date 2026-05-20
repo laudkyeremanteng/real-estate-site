@@ -19,6 +19,7 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const registered = searchParams.get('registered') === 'true'
+  const resetSuccess = searchParams.get('reset') === 'success'
   
   const [formData, setFormData] = useState({
     email: '',
@@ -61,6 +62,12 @@ function LoginForm() {
               {registered && (
                 <div className="bg-green-500/20 border border-green-500 text-green-500 px-4 py-3 rounded-lg mb-6">
                   Registration successful! Please login.
+                </div>
+              )}
+
+              {resetSuccess && (
+                <div className="bg-green-500/20 border border-green-500 text-green-500 px-4 py-3 rounded-lg mb-6">
+                  Password reset successful! Please login with your new password.
                 </div>
               )}
 
@@ -121,6 +128,12 @@ function LoginForm() {
                   {loading ? 'Signing In...' : 'Login'}
                 </button>
               </form>
+
+              <div className="mt-4 text-center">
+                <Link href="/auth/forgot-password" className="text-gold hover:text-yellow-500 transition-colors text-sm">
+                  Forgot Password?
+                </Link>
+              </div>
 
               <p className="text-gray-400 text-center mt-6">
                 Don't have an account?{' '}

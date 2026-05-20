@@ -6,47 +6,53 @@
 // Used by: Homepage
 // =================================================================
 
-import Link from 'next/link'
+'use client'
 
-// Sample featured properties data with real Delta Homes properties
-export const featuredProperties = [
-  {
-    id: 1,
-    title: "2 Bedroom Apartment for Rent",
-    location: "North Legon, Ghana",
-    price: "GHS 5,000/month",
-    bedrooms: 2,
-    bathrooms: 1,
-    image: "https://i.imgur.com/o4nvgjz.jpg",
-    featured: true
-  },
-  {
-    id: 2,
-    title: "Executive Four Bedroom House",
-    location: "Taifa, Ghana",
-    price: "GHS 8,000/month",
-    bedrooms: 4,
-    bathrooms: 1,
-    image: "https://i.imgur.com/kh9afbz.jpeg",
-    featured: true
-  },
-  {
-    id: 3,
-    title: "Three Bedroom House with Boys' Quarters",
-    location: "East Legon Hills, Ghana",
-    price: "GHs 6,500/month",
-    bedrooms: 3,
-    bathrooms: 1,
-    image: "https://i.imgur.com/zqy14Z1.jpeg",
-    featured: true
-  }
-]
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
+
+// TypeScript interface for property
+interface Property {
+  id: string;
+  title: string;
+  location: string;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  image_url: string;
+  media_urls?: string[];
+  status: string;
+}
 
 // Featured properties showcase component
 export default function FeaturedProperties() {
+  const [properties, setProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchFeaturedProperties()
+  }, [])
+
+  const fetchFeaturedProperties = async () => {
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*')
+      .eq('status', 'available')
+      .order('created_at', { ascending: false })
+      .limit(3)
+
+    if (error) {
+      console.error('Error fetching properties:', error)
+    } else {
+      setProperties(data || [])
+    }
+    setLoading(false)
+  }
+
   return (
     <section className="py-20 bg-black">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4">  
         {/* Section header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-heading font-bold text-white mb-4">
@@ -58,65 +64,71 @@ export default function FeaturedProperties() {
         </div>
 
         {/* Properties grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredProperties.map((property) => (
-            
-            <div key={property.id} className="group relative overflow-hidden rounded-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-gold/20 hover:-translate-y-2">
-              {/* Property image container */}
-              <div className="relative h-64 overflow-hidden">
-                {/* Property image with zoom effect on hover */}
-                <img 
-                  src={property.image} 
-                  alt={property.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                
-                {/* Featured badge */}
-                {property.featured && (
+        {loading ? (
+          <div className="text-center text-gray-400">Loading properties...</div>
+        ) : properties.length === 0 ? (
+          <div className="text-center text-gray-400">No properties available yet.</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {properties.map((property: Property) => (
+              
+              <div key={property.id} className="group relative overflow-hidden rounded-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-gold/20 hover:-translate-y-2">
+                {/* Property image container */}
+                <div className="relative h-64 overflow-hidden">
+                  {/* Property image with zoom effect on hover */}
+                  <img 
+                    src={property.media_urls?.[0] || property.image_url || 'https://via.placeholder.com/400x300?text=Property'} 
+                    alt={property.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  
+                  {/* Featured badge */}
                   <div className="absolute top-4 right-4">
                     <span className="bg-gold text-black px-3 py-1 text-sm font-semibold">
-                      Featured
+                      Available
                     </span>
                   </div>
-                )}
-              </div>
-              
-              {/* Property details with background color change on hover */}
-              <div className="bg-gray-900 p-6 group-hover:bg-gray-800 transition-colors duration-300">
-                {/* Property title with gold color on hover */}
-                <h3 className="text-lg font-heading font-semibold text-white mb-2 group-hover:text-gold transition-colors">
-                  {property.title}
-                </h3>
-                
-                {/* Property location */}
-                <p className="text-gray-400 font-body text-sm mb-4">{property.location}</p>
-                
-                {/* Price display */}
-                <div className="mb-4">
-                  <span className="text-xl font-heading font-bold text-gold">{property.price}</span>
                 </div>
+                
+                {/* Property details with background color change on hover */}
+                <div className="bg-gray-900 p-6 group-hover:bg-gray-800 transition-colors duration-300">
+                  {/* Property title with gold color on hover */}
+                  <h3 className="text-lg font-heading font-semibold text-white mb-2 group-hover:text-gold transition-colors">
+                    {property.title}
+                  </h3>
+                  
+                  {/* Property location */}
+                  <p className="text-gray-400 font-body text-sm mb-4">{property.location}</p>
+                  
+                  {/* Price display */}
+                  <div className="mb-4">
+                    <span className="text-xl font-heading font-bold text-gold">
+                      GHS {property.price.toLocaleString()}
+                    </span>
+                  </div>
 
-                {/* Action buttons */}
-                <div className="flex space-x-3">
-                  <Link 
-                    href={`/properties/${property.id}`}
-                    className="flex-1 bg-gold text-black py-2 text-sm font-body font-semibold hover:bg-yellow-500 transition-colors rounded-lg text-center"
-                  >
-                    View Details
-                  </Link>
-                  <button className="flex-1 border border-gold text-gold py-2 text-sm font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg">
-                    Quick Tour
-                  </button>
+                  {/* Action buttons */}
+                  <div className="flex space-x-3">
+                    <Link 
+                      href={`/properties/${property.id}`}
+                      className="flex-1 bg-gold text-black py-2 text-sm font-body font-semibold hover:bg-yellow-500 transition-colors rounded-lg text-center"
+                    >
+                      View Details
+                    </Link>
+                    <button className="flex-1 border border-gold text-gold py-2 text-sm font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg">
+                      Quick Tour
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* View all properties link */}
         <div className="text-center mt-12">
           <Link 
-            href="/properties" 
+            href="/search" 
             className="inline-flex items-center text-gold hover:text-yellow-500 transition-colors font-body font-semibold"
           >
             View All Properties

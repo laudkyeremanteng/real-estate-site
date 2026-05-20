@@ -3,7 +3,23 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-const properties = [
+// TypeScript interface for property
+interface Property {
+  id: number;
+  title: string;
+  location: string;
+  price: string;
+  bedrooms: number;
+  bathrooms: number;
+  landSize: string;
+  propertyType: string;
+  featured: boolean;
+  status: string;
+  image: string;
+  description: string;
+}
+
+const properties: Property[] = [
   {
     id: 1,
     title: "Modern Villa in Airport Hills",
@@ -147,7 +163,7 @@ export default function PropertyGrid() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const PropertyCard = ({ property }: { property: typeof properties[0] }) => (
+  const PropertyCard = ({ key, property }: { key: number; property: Property }) => (
     <div className="group bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gold/50 transition-all duration-300">
       <div className="relative h-64 overflow-hidden">
         <img 
@@ -198,7 +214,7 @@ export default function PropertyGrid() {
     </div>
   )
 
-  const PropertyListItem = ({ property }: { property: typeof properties[0] }) => (
+  const PropertyListItem = ({ key, property }: { key: number; property: Property }) => (
     <div className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gold/50 transition-all duration-300">
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/3 h-48 md:h-auto relative overflow-hidden">
@@ -287,13 +303,13 @@ export default function PropertyGrid() {
 
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentProperties.map((property) => (
+          {currentProperties.map((property: Property) => (
             <PropertyCard key={property.id} property={property} />
           ))}
         </div>
       ) : (
         <div className="space-y-6">
-          {currentProperties.map((property) => (
+          {currentProperties.map((property: Property) => (
             <PropertyListItem key={property.id} property={property} />
           ))}
         </div>

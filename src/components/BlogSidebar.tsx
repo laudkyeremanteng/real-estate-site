@@ -2,7 +2,20 @@
 
 import Link from 'next/link'
 
-const recentPosts = [
+// TypeScript interfaces
+interface BlogPost {
+  id: number;
+  title: string;
+  date: string;
+  image: string;
+}
+
+interface Category {
+  name: string;
+  count: number;
+}
+
+const recentPosts: BlogPost[] = [
   {
     id: 5,
     title: "Investment Opportunities in Ghana's Coastal Properties",
@@ -29,7 +42,7 @@ const recentPosts = [
   }
 ]
 
-const categories = [
+const categories: Category[] = [
   { name: "Market Insights", count: 2 },
   { name: "Buying Guides", count: 1 },
   { name: "Investment", count: 1 },
@@ -70,7 +83,7 @@ export default function BlogSidebar() {
       <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
         <h3 className="text-lg font-heading font-semibold text-white mb-4">Recent Posts</h3>
         <div className="space-y-4">
-          {recentPosts.map((post) => (
+          {recentPosts.map((post: BlogPost) => (
             <Link 
               key={post.id}
               href={`/blog/${post.id}`}
@@ -96,7 +109,7 @@ export default function BlogSidebar() {
       <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
         <h3 className="text-lg font-heading font-semibold text-white mb-4">Categories</h3>
         <div className="space-y-2">
-          {categories.map((category) => (
+          {categories.map((category: Category) => (
             <Link
               key={category.name}
               href={`/blog/category/${category.name.toLowerCase().replace(' ', '-')}`}
@@ -113,7 +126,7 @@ export default function BlogSidebar() {
       <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
         <h3 className="text-lg font-heading font-semibold text-white mb-4">Popular Tags</h3>
         <div className="flex flex-wrap gap-2">
-          {popularTags.map((tag) => (
+          {popularTags.map((tag: string) => (
             <Link
               key={tag}
               href={`/blog/tag/${tag.toLowerCase().replace(' ', '-')}`}
@@ -122,24 +135,6 @@ export default function BlogSidebar() {
               #{tag}
             </Link>
           ))}
-        </div>
-      </div>
-
-      {/* Newsletter */}
-      <div className="bg-gradient-to-br from-gold/20 to-gold/10 rounded-xl p-6 border border-gold/30">
-        <h3 className="text-lg font-heading font-semibold text-white mb-2">Newsletter</h3>
-        <p className="text-sm text-gray-300 font-body mb-4">
-          Get the latest real estate insights and market trends delivered to your inbox
-        </p>
-        <div className="space-y-3">
-          <input
-            type="email"
-            placeholder="Your email address"
-            className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body placeholder-gray-400"
-          />
-          <button className="w-full bg-gold text-black py-3 font-body font-semibold hover:bg-yellow-500 transition-colors rounded-lg">
-            Subscribe
-          </button>
         </div>
       </div>
     </div>

@@ -9,28 +9,72 @@
 
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { supabase } from '@/lib/supabase'
 
-// Import featured properties data to sync with homepage
-import { featuredProperties } from '@/components/FeaturedProperties'
+// TypeScript interface for property
+interface Property {
+  id: string;
+  title: string;
+  location: string;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  description: string;
+  image_url: string;
+  media_urls?: string[];
+  status: string;
+}
 
 // Property details page component
 export default function PropertyDetailsPage() {
   const params = useParams()
+  const [property, setProperty] = useState<Property | null>(null)
+  const [loading, setLoading] = useState(true)
   
-  // Find property by ID from featured properties
-  const property = featuredProperties.find((p) => p.id === parseInt(params.id as string))
+  useEffect(() => {
+    fetchProperty()
+  }, [params.id])
+
+  const fetchProperty = async () => {
+    const id = params.id as string
+    
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) {
+      console.error('Error fetching property:', error)
+      setLoading(false)
+    } else {
+      setProperty(data)
+      setLoading(false)
+    }
+  }
   
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-heading font-bold mb-4">Loading...</h1>
+        </div>
+      </main>
+    )
+  }
+
   if (!property) {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-heading font-bold mb-4">Property Not Found</h1>
           <p className="text-gray-300 mb-8">The property you're looking for doesn't exist.</p>
-          <Link href="/properties" className="bg-gold text-black px-6 py-3 rounded-lg font-body font-semibold hover:bg-yellow-500 transition-colors">
+          <Link href="/search" className="bg-gold text-black px-6 py-3 rounded-lg font-body font-semibold hover:bg-yellow-500 transition-colors">
             View All Properties
           </Link>
         </div>
@@ -38,59 +82,13 @@ export default function PropertyDetailsPage() {
     )
   }
 
-  // Get property details based on ID
-  const details = property.id === 1 ? {
-    title: "2 Bedroom Apartment for Rent",
-    location: "North Legon, Ghana",
-    price: "GHS 5,000/month",
-    bedrooms: 2,
-    description: "Modern 2-bedroom apartment located in the prestigious North Legon area. This unfurnished apartment features spacious living areas, modern finishes, and excellent amenities. Perfect for professionals and small families seeking quality living in one of Accra's most desirable neighborhoods.",
-    features: [
-      "2 Spacious Bedrooms",
-      "Bathroom", 
-      "Open Plan Living Area",
-      "Modern Kitchen",
-      "24/7 Security"
-    ],
-    video: "https://i.imgur.com/o4nvgjz.mp4",
-    hasVideo: true
-  } : property.id === 2 ? {
-    title: "Executive Four Bedroom House",
-    location: "Taifa, Ghana",
-    price: "GHS 8,000/month",
-    bedrooms: 4,
-    description: "Newly built executive four-bedroom house located in Taifa, Mr. Agyei area. This premium property features modern construction, spacious living areas, and excellent amenities. Perfect for families seeking quality living with direct agency deal - no middleman fees.",
-    features: [
-      "4 Spacious Bedrooms",
-      "Bathroom", 
-      "Open Plan Living Area",
-      "Modern Kitchen",
-      "Parking Space",
-      "24/7 Security",
-      "New Construction",
-      "Direct Agency Deal"
-    ],
-    video: null,
-    hasVideo: false
-  } : {
-    title: "Three Bedroom House with Boys' Quarters",
-    location: "East Legon Hills, Ghana",
-    price: "GHs 6,500/month",
-    bedrooms: 3,
-    description: "Beautiful three-bedroom house with boys' quarters located in the prestigious East Legon Hills Santoe area. This property features en-suite bedrooms, guest washroom, fitted kitchen, air conditioning, water reservoir, self-compound with security fence, and automated gate. Perfect for families seeking luxury living in one of Accra's most desirable neighborhoods.",
-    features: [
-      "3 En-suite Bedrooms",
-      "Boys' Quarters",
-      "Guest Washroom",
-      "Fitted Kitchen",
-      "Air Conditioning",
-      "Water Reservoir",
-      "Security Fence",
-      "Automated Gate"
-    ],
-    video: null,
-    hasVideo: false
-  }
+  const features = [
+    `${property.bedrooms} Spacious Bedrooms`,
+    `${property.bathrooms} Bathrooms`,
+    "Modern Kitchen",
+    "24/7 Security",
+    "Parking Space"
+  ]
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -100,50 +98,46 @@ export default function PropertyDetailsPage() {
       <section className="pt-32 pb-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12">
-            {/* Property media - Video or Image */}
+            {/* Property media gallery */}
             <div>
               <div className="relative">
-                {details.hasVideo && details.video ? (
-                  /* Video player for properties with video */
-                  <>
-                    <video 
-                      src={details.video}
-                      controls
-                      autoPlay
-                      muted
-                      loop
-                      className="w-full h-96 object-cover rounded-lg"
-                      poster={property.image}
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                    
-                    {/* Video controls info */}
-                    <div className="mt-4 p-4 bg-gray-900 rounded-lg">
-                      <h3 className="text-gold font-heading font-semibold mb-2">Property Video Tour</h3>
-                      <p className="text-gray-300 font-body text-sm">
-                        Watch the complete video tour of this {details.bedrooms}-bedroom property in {details.location}.
-                      </p>
-                    </div>
-                  </>
+                {property.media_urls && property.media_urls.length > 0 ? (
+                  <div className="space-y-4">
+                    {property.media_urls.map((url, index) => {
+                      const isVideo = url.match(/\.(mp4|webm|ogg|mov)$/i)
+                      return isVideo ? (
+                        <video
+                          key={index}
+                          src={url}
+                          controls
+                          className="w-full h-64 object-cover rounded-lg"
+                        />
+                      ) : (
+                        <img
+                          key={index}
+                          src={url}
+                          alt={`${property.title} - Media ${index + 1}`}
+                          className="w-full h-64 object-cover rounded-lg"
+                        />
+                      )
+                    })}
+                  </div>
                 ) : (
-                  /* Image display for properties without video */
-                  <>
-                    <img 
-                      src={property.image}
-                      alt={details.title}
-                      className="w-full h-96 object-cover rounded-lg"
-                    />
-                    
-                    {/* Image info */}
-                    <div className="mt-4 p-4 bg-gray-900 rounded-lg">
-                      <h3 className="text-gold font-heading font-semibold mb-2">Property Photos</h3>
-                      <p className="text-gray-300 font-body text-sm">
-                        View this beautiful {details.bedrooms}-bedroom property located in {details.location}.
-                      </p>
-                    </div>
-                  </>
+                  <img 
+                    src={property.image_url || 'https://via.placeholder.com/400x300?text=Property'}
+                    alt={property.title}
+                    className="w-full h-96 object-cover rounded-lg"
+                  />
                 )}
+                
+                {/* Media info */}
+                <div className="mt-4 p-4 bg-gray-900 rounded-lg">
+                  <h3 className="text-gold font-heading font-semibold mb-2">Property Media</h3>
+                  <p className="text-gray-300 font-body text-sm">
+                    View this beautiful {property.bedrooms}-bedroom property located in {property.location}.
+                    {property.media_urls && property.media_urls.length > 0 && ` (${property.media_urls.length} media items)`}
+                  </p>
+                </div>
               </div>
             </div>
             
@@ -152,23 +146,36 @@ export default function PropertyDetailsPage() {
               {/* Property title and price */}
               <div className="mb-6">
                 <h1 className="text-4xl font-heading font-bold text-white mb-4">
-                  {details.title}
+                  {property.title}
                 </h1>
                 <div className="flex items-center gap-4 mb-4">
                   <span className="text-3xl font-heading font-bold text-gold">
-                    {details.price}
+                    GHS {property.price.toLocaleString()}
                   </span>
                   <span className="text-gray-400 font-body">
-                    {details.location}
+                    {property.location}
+                  </span>
+                </div>
+                <div className="mb-4">
+                  <span className={`px-3 py-1 text-sm font-semibold rounded ${
+                    property.status === 'available' ? 'bg-green-500 text-black' :
+                    property.status === 'rented' ? 'bg-blue-500 text-black' :
+                    'bg-red-500 text-black'
+                  }`}>
+                    {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
                   </span>
                 </div>
               </div>
               
               {/* Property specifications */}
-              <div className="mb-6">
+              <div className="mb-6 grid grid-cols-2 gap-4">
                 <div className="bg-gray-900 p-4 rounded-lg">
                   <h3 className="text-gold font-heading font-semibold mb-2">Bedrooms</h3>
-                  <p className="text-2xl font-heading font-bold">{details.bedrooms}</p>
+                  <p className="text-2xl font-heading font-bold">{property.bedrooms}</p>
+                </div>
+                <div className="bg-gray-900 p-4 rounded-lg">
+                  <h3 className="text-gold font-heading font-semibold mb-2">Bathrooms</h3>
+                  <p className="text-2xl font-heading font-bold">{property.bathrooms}</p>
                 </div>
               </div>
               
@@ -176,7 +183,7 @@ export default function PropertyDetailsPage() {
               <div className="mb-6">
                 <h2 className="text-2xl font-heading font-bold text-gold mb-4">Description</h2>
                 <p className="text-gray-300 font-body leading-relaxed">
-                  {details.description}
+                  {property.description}
                 </p>
               </div>
               
@@ -184,7 +191,7 @@ export default function PropertyDetailsPage() {
               <div className="mb-6">
                 <h2 className="text-2xl font-heading font-bold text-gold mb-4">Features</h2>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {details.features.map((feature, index) => (
+                  {features.map((feature, index) => (
                     <li key={index} className="flex items-center text-gray-300 font-body">
                       <svg className="w-5 h-5 text-gold mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

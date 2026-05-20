@@ -12,7 +12,6 @@ const agents = [
     experience: "15+ Years",
     specializations: ["Luxury Homes", "Investment Properties", "Airport Hills", "Cantonments"],
     languages: ["English", "Twi", "Ga"],
-    email: "kwame@deltahomesgh.com",
     phone: "+233 30 123 4567",
     whatsapp: "+233 30 123 4567",
     propertiesSold: 127,
@@ -30,7 +29,6 @@ const agents = [
     experience: "12+ Years",
     specializations: ["Investment Analysis", "Commercial Properties", "Market Research", "ROI Optimization"],
     languages: ["English", "Twi", "French"],
-    email: "ama@deltahomesgh.com",
     phone: "+233 30 123 4568",
     whatsapp: "+233 30 123 4568",
     propertiesSold: 98,
@@ -48,7 +46,6 @@ const agents = [
     experience: "10+ Years",
     specializations: ["Luxury Villas", "Penthouses", "Beachfront Properties", "High-End Clientele"],
     languages: ["English", "Ga", "Spanish"],
-    email: "kojo@deltahomesgh.com",
     phone: "+233 30 123 4569",
     whatsapp: "+233 30 123 4569",
     propertiesSold: 84,
@@ -66,7 +63,6 @@ const agents = [
     experience: "8+ Years",
     specializations: ["Family Homes", "First-Time Buyers", "Suburban Properties", "Property Valuation"],
     languages: ["English", "Twi", "Ewe"],
-    email: "naomi@deltahomesgh.com",
     phone: "+233 30 123 4570",
     whatsapp: "+233 30 123 4570",
     propertiesSold: 156,
@@ -84,7 +80,6 @@ const agents = [
     experience: "18+ Years",
     specializations: ["Office Spaces", "Retail Properties", "Commercial Leasing", "Business Relocation"],
     languages: ["English", "Twi", "Mandarin"],
-    email: "david@deltahomesgh.com",
     phone: "+233 30 123 4571",
     whatsapp: "+233 30 123 4571",
     propertiesSold: 76,
@@ -113,14 +108,12 @@ export default function AgentGrid() {
     ? agents
     : agents.filter(agent => agent.specializations.includes(selectedSpecialization))
 
-  const handleContact = (type: 'phone' | 'whatsapp' | 'email', contact: string) => {
+  const handleContact = (type: 'phone' | 'whatsapp', contact: string) => {
     if (type === 'phone') {
       window.open(`tel:${contact}`)
     } else if (type === 'whatsapp') {
       const message = encodeURIComponent("Hi! I'm interested in learning more about your real estate services.")
       window.open(`https://wa.me/${contact.replace(/\D/g, '')}?text=${message}`, '_blank')
-    } else if (type === 'email') {
-      window.open(`mailto:${contact}?subject=Real Estate Inquiry - Delta Homes Ghana`)
     }
   }
 
@@ -221,12 +214,6 @@ export default function AgentGrid() {
               className="flex-1 bg-green-600 text-white py-2 font-body font-semibold hover:bg-green-700 transition-colors rounded-lg text-sm"
             >
               WhatsApp
-            </button>
-            <button
-              onClick={() => handleContact('email', agent.email)}
-              className="flex-1 border border-gold text-gold py-2 font-body font-semibold hover:bg-gold hover:text-black transition-colors rounded-lg text-sm"
-            >
-              Email
             </button>
           </div>
           

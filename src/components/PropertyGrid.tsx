@@ -1,157 +1,47 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
 // TypeScript interface for property
 interface Property {
-  id: number;
+  id: string;
   title: string;
   location: string;
-  price: string;
+  price: number;
   bedrooms: number;
   bathrooms: number;
-  landSize: string;
-  propertyType: string;
-  featured: boolean;
-  status: string;
-  image: string;
   description: string;
+  image_url: string;
+  media_urls?: string[];
+  status: string;
 }
 
-const properties: Property[] = [
-  {
-    id: 1,
-    title: "Modern Villa in Airport Hills",
-    location: "Accra, Ghana",
-    price: "₵1,250,000",
-    bedrooms: 5,
-    bathrooms: 4,
-    landSize: "1,200 sq m",
-    propertyType: "Villa",
-    featured: true,
-    status: "Available",
-    image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=400&h=300&fit=crop",
-    description: "Luxurious modern villa with panoramic city views, infinity pool, and state-of-the-art amenities."
-  },
-  {
-    id: 2,
-    title: "Penthouse Suite in Cantonments",
-    location: "Cantonments, Accra",
-    price: "₵850,000",
-    bedrooms: 3,
-    bathrooms: 3,
-    landSize: "350 sq m",
-    propertyType: "Penthouse",
-    featured: true,
-    status: "Available",
-    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=400&h=300&fit=crop",
-    description: "Exclusive penthouse with rooftop terrace, city views, and premium finishes throughout."
-  },
-  {
-    id: 3,
-    title: "Beachfront Property",
-    location: "Labadi, Accra",
-    price: "₵2,100,000",
-    bedrooms: 6,
-    bathrooms: 5,
-    landSize: "2,500 sq m",
-    propertyType: "House",
-    featured: true,
-    status: "Available",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop",
-    description: "Stunning beachfront property with private beach access, infinity pool, and tropical gardens."
-  },
-  {
-    id: 4,
-    title: "Executive Apartment",
-    location: "Airport City, Accra",
-    price: "₵450,000",
-    bedrooms: 2,
-    bathrooms: 2,
-    landSize: "180 sq m",
-    propertyType: "Apartment",
-    featured: false,
-    status: "Available",
-    image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop",
-    description: "Modern executive apartment in prime location with concierge services and gym access."
-  },
-  {
-    id: 5,
-    title: "Colonial Style House",
-    location: "East Legon, Accra",
-    price: "₵1,800,000",
-    bedrooms: 4,
-    bathrooms: 3,
-    landSize: "800 sq m",
-    propertyType: "House",
-    featured: false,
-    status: "Available",
-    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
-    description: "Elegant colonial-style house with modern amenities, swimming pool, and lush gardens."
-  },
-  {
-    id: 6,
-    title: "Luxury Townhouse",
-    location: "Dawhenya, Accra",
-    price: "₵680,000",
-    bedrooms: 3,
-    bathrooms: 2,
-    landSize: "220 sq m",
-    propertyType: "House",
-    featured: false,
-    status: "Available",
-    image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&h=300&fit=crop",
-    description: "Contemporary townhouse with modern design, private garden, and secure gated community."
-  },
-  {
-    id: 7,
-    title: "Garden Villa",
-    location: "Tema, Ghana",
-    price: "₵920,000",
-    bedrooms: 4,
-    bathrooms: 3,
-    landSize: "600 sq m",
-    propertyType: "Villa",
-    featured: false,
-    status: "Available",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop",
-    description: "Beautiful garden villa with outdoor entertainment area and mature tropical gardens."
-  },
-  {
-    id: 8,
-    title: "Prime Land Plot",
-    location: "Airport Hills, Accra",
-    price: "₵350,000",
-    bedrooms: 0,
-    bathrooms: 0,
-    landSize: "700 sq m",
-    propertyType: "Land",
-    featured: false,
-    status: "Available",
-    image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&h=300&fit=crop",
-    description: "Prime residential land plot in exclusive neighborhood, ready for development."
-  },
-  {
-    id: 9,
-    title: "Waterfront House",
-    location: "Ada Foah, Ghana",
-    price: "₵1,500,000",
-    bedrooms: 5,
-    bathrooms: 4,
-    landSize: "1,800 sq m",
-    propertyType: "House",
-    featured: false,
-    status: "Available",
-    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
-    description: "Exclusive waterfront property with private dock, beach access, and stunning views."
-  }
-]
-
 export default function PropertyGrid() {
+  const [properties, setProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [currentPage, setCurrentPage] = useState(1)
   const propertiesPerPage = 9
+
+  useEffect(() => {
+    fetchProperties()
+  }, [])
+
+  const fetchProperties = async () => {
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching properties:', error)
+    } else {
+      setProperties(data || [])
+    }
+    setLoading(false)
+  }
 
   const totalPages = Math.ceil(properties.length / propertiesPerPage)
   const startIndex = (currentPage - 1) * propertiesPerPage
@@ -163,24 +53,21 @@ export default function PropertyGrid() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const PropertyCard = ({ key, property }: { key: number; property: Property }) => (
+  const PropertyCard = ({ key, property }: { key: string; property: Property }) => (
     <div className="group bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gold/50 transition-all duration-300">
       <div className="relative h-64 overflow-hidden">
         <img 
-          src={property.image} 
+          src={property.media_urls?.[0] || property.image_url || 'https://via.placeholder.com/400x300?text=Property'} 
           alt={property.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        {property.featured && (
-          <div className="absolute top-4 right-4">
-            <span className="bg-gold text-black px-3 py-1 text-sm font-body font-semibold rounded-full">
-              Featured
-            </span>
-          </div>
-        )}
         <div className="absolute bottom-4 left-4">
-          <span className="bg-green-600 text-white px-3 py-1 text-sm font-body font-semibold rounded-full">
-            {property.status}
+          <span className={`px-3 py-1 text-sm font-body font-semibold rounded-full ${
+            property.status === 'available' ? 'bg-green-600 text-white' :
+            property.status === 'rented' ? 'bg-blue-600 text-white' :
+            'bg-red-600 text-white'
+          }`}>
+            {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
           </span>
         </div>
       </div>
@@ -192,10 +79,10 @@ export default function PropertyGrid() {
         <p className="text-gray-400 font-body mb-4">{property.location}</p>
         
         <div className="flex justify-between items-center mb-4">
-          <span className="text-2xl font-heading font-bold text-gold">{property.price}</span>
+          <span className="text-2xl font-heading font-bold text-gold">GHS {property.price.toLocaleString()}</span>
           <div className="flex space-x-4 text-sm text-gray-400 font-body">
-            <span>{property.bedrooms > 0 ? `${property.bedrooms} beds` : 'Land'}</span>
-            {property.bathrooms > 0 && <span>{property.bathrooms} baths</span>}
+            <span>{property.bedrooms} beds</span>
+            <span>{property.bathrooms} baths</span>
           </div>
         </div>
 
@@ -214,22 +101,15 @@ export default function PropertyGrid() {
     </div>
   )
 
-  const PropertyListItem = ({ key, property }: { key: number; property: Property }) => (
+  const PropertyListItem = ({ key, property }: { key: string; property: Property }) => (
     <div className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gold/50 transition-all duration-300">
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/3 h-48 md:h-auto relative overflow-hidden">
           <img 
-            src={property.image} 
+            src={property.media_urls?.[0] || property.image_url || 'https://via.placeholder.com/400x300?text=Property'} 
             alt={property.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          {property.featured && (
-            <div className="absolute top-4 right-4">
-              <span className="bg-gold text-black px-3 py-1 text-sm font-body font-semibold rounded-full">
-                Featured
-              </span>
-            </div>
-          )}
         </div>
         
         <div className="md:w-2/3 p-6">
@@ -242,11 +122,10 @@ export default function PropertyGrid() {
               <p className="text-gray-300 font-body text-sm mb-4">{property.description}</p>
             </div>
             <div className="text-right">
-              <span className="text-2xl font-heading font-bold text-gold block mb-2">{property.price}</span>
+              <span className="text-2xl font-heading font-bold text-gold block mb-2">GHS {property.price.toLocaleString()}</span>
               <div className="text-sm text-gray-400 font-body">
-                <span>{property.bedrooms > 0 ? `${property.bedrooms} beds` : 'Land'}</span>
-                {property.bathrooms > 0 && <span> • {property.bathrooms} baths</span>}
-                <span> • {property.landSize}</span>
+                <span>{property.bedrooms} beds</span>
+                <span> • {property.bathrooms} baths</span>
               </div>
             </div>
           </div>
@@ -266,6 +145,14 @@ export default function PropertyGrid() {
       </div>
     </div>
   )
+
+  if (loading) {
+    return <div className="text-center text-gray-400">Loading properties...</div>
+  }
+
+  if (properties.length === 0) {
+    return <div className="text-center text-gray-400">No properties available yet.</div>
+  }
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import { supabase } from './supabase'
 
 // Agent registration
-export async function registerAgent(email: string, password: string, name: string, phone: string) {
+export async function registerAgent(email: string, password: string, name: string, phone: string, whatsapp: string) {
   // 1. Sign up user with Supabase Auth
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
@@ -25,6 +25,7 @@ export async function registerAgent(email: string, password: string, name: strin
       password, // Note: In production, you should not store passwords
       name,
       phone,
+      whatsapp,
     })
 
   if (agentError) {

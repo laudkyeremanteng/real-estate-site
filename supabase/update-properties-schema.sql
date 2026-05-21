@@ -11,6 +11,16 @@ ALTER TABLE properties ADD COLUMN IF NOT EXISTS currency TEXT DEFAULT 'GHS';
 ALTER TABLE properties ADD COLUMN IF NOT EXISTS whatsapp TEXT;
 ALTER TABLE properties ADD COLUMN IF NOT EXISTS phone TEXT;
 
+-- Add whatsapp column to agents table
+ALTER TABLE agents ADD COLUMN IF NOT EXISTS whatsapp TEXT;
+
+-- Update existing agents to have a default whatsapp value (using phone as fallback)
+UPDATE agents SET whatsapp = phone WHERE whatsapp IS NULL;
+
+-- Now make phone and whatsapp NOT NULL
+ALTER TABLE agents ALTER COLUMN phone SET NOT NULL;
+ALTER TABLE agents ALTER COLUMN whatsapp SET NOT NULL;
+
 -- Remove bedrooms and bathrooms columns (optional - if you want to keep them for backward compatibility, comment this out)
 ALTER TABLE properties DROP COLUMN IF EXISTS bedrooms;
 ALTER TABLE properties DROP COLUMN IF EXISTS bathrooms;

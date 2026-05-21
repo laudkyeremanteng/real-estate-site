@@ -14,6 +14,7 @@ export default function RegisterPage() {
     password: '',
     name: '',
     phone: '',
+    whatsapp: '',
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -28,7 +29,8 @@ export default function RegisterPage() {
       formData.email,
       formData.password,
       formData.name,
-      formData.phone
+      formData.phone,
+      formData.whatsapp
     )
 
     setLoading(false)
@@ -94,6 +96,18 @@ export default function RegisterPage() {
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
                     placeholder="Enter your phone number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white font-body mb-2">WhatsApp</label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.whatsapp}
+                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                    className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
+                    placeholder="Enter your WhatsApp number"
                   />
                 </div>
 

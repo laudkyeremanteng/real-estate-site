@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS agents (
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
   name TEXT NOT NULL,
-  phone TEXT,
+  phone TEXT NOT NULL,
+  whatsapp TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

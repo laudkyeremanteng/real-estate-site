@@ -13,6 +13,7 @@ interface Property {
   title: string
   location: string
   price: number
+  currency?: string
   bedrooms: number
   bathrooms: number
   description: string
@@ -189,7 +190,7 @@ export default function DashboardPage() {
                       <div>
                         <h3 className="text-lg font-heading font-semibold text-white">{property.title}</h3>
                         <p className="text-gray-400 text-sm">{property.location}</p>
-                        <p className="text-gold font-bold mt-2">GHS {property.price.toLocaleString()}</p>
+                        <p className="text-gold font-bold mt-2">{property.currency === 'USD' ? '$' : 'GHS '} {property.price.toLocaleString()}</p>
                       </div>
                       <div className="flex space-x-2">
                         <button
@@ -207,9 +208,8 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <div className="flex justify-between items-center">
-                      <div className="flex space-x-4 text-sm text-gray-400">
-                        <span>{property.bedrooms} Bed</span>
-                        <span>{property.bathrooms} Bath</span>
+                      <div className="text-sm text-gray-400">
+                        Posted: {new Date(property.created_at).toLocaleDateString()} at {new Date(property.created_at).toLocaleTimeString()}
                       </div>
                       <select
                         value={property.status}
@@ -259,6 +259,29 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+
+    // Validate WhatsApp number (10 digits)
+    const whatsappDigits = formData.whatsapp.replace(/[^0-9]/g, '')
+    if (whatsappDigits.length !== 10) {
+      alert('WhatsApp number must be 10 digits')
+      setLoading(false)
+      return
+    }
+
+    // Validate phone number (10 digits)
+    const phoneDigits = formData.phone.replace(/[^0-9]/g, '')
+    if (phoneDigits.length !== 10) {
+      alert('Phone number must be 10 digits')
+      setLoading(false)
+      return
+    }
+
+    // Validate that at least one media file is uploaded for new properties
+    if (!property && mediaFiles.length === 0) {
+      alert('Please upload at least one image or video for the property')
+      setLoading(false)
+      return
+    }
 
     let mediaUrls: string[] = []
 
@@ -369,9 +392,10 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-white font-body mb-2">WhatsApp Number</label>
+          <label className="block text-white font-body mb-2">WhatsApp Number *</label>
           <input
             type="tel"
+            required
             value={formData.whatsapp}
             onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
             className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
@@ -379,9 +403,10 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
           />
         </div>
         <div>
-          <label className="block text-white font-body mb-2">Phone Number</label>
+          <label className="block text-white font-body mb-2">Phone Number *</label>
           <input
             type="tel"
+            required
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             className="w-full px-4 py-3 bg-black/50 border border-gold/30 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
@@ -390,8 +415,8 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
         </div>
       </div>
       <div>
-        <label className="block text-white font-body mb-2">Property Media (Images & Videos)</label>
-        <p className="text-gray-400 text-sm mb-2">Upload up to 4 media items (images or videos)</p>
+        <label className="block text-white font-body mb-2">Property Media (Images & Videos) *</label>
+        <p className="text-gray-400 text-sm mb-2">Upload at least 1 media item (up to 4 images or videos)</p>
         <input
           type="file"
           accept="image/*,video/*"

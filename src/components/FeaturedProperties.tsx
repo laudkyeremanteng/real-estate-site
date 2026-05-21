@@ -22,6 +22,7 @@ interface Property {
   image_url: string;
   media_urls?: string[];
   status: string;
+  created_at: string;
 }
 
 // Featured properties showcase component
@@ -105,6 +106,11 @@ export default function FeaturedProperties() {
                       {property.currency === 'USD' ? '$' : 'GHS '} {property.price.toLocaleString()}
                     </span>
                   </div>
+
+                  {/* Posted date/time */}
+                  <p className="text-gray-500 text-sm mb-4">
+                    Posted: {new Date(property.created_at).toLocaleDateString()} at {new Date(property.created_at).toLocaleTimeString()}
+                  </p>
 
                   {/* Action button */}
                   <Link 

@@ -15,6 +15,7 @@ interface Property {
   image_url: string;
   media_urls?: string[];
   status: string;
+  created_at: string;
 }
 
 export default function PropertyGrid() {
@@ -83,6 +84,10 @@ export default function PropertyGrid() {
           </span>
         </div>
 
+        <p className="text-gray-500 text-sm mb-4">
+          Posted: {new Date(property.created_at).toLocaleDateString()} at {new Date(property.created_at).toLocaleTimeString()}
+        </p>
+
         <Link 
           href={`/properties/${property.id}`}
           className="block w-full bg-gold text-black py-2 font-body font-semibold text-center hover:bg-yellow-500 transition-colors rounded-lg"
@@ -112,6 +117,9 @@ export default function PropertyGrid() {
               </h3>
               <p className="text-gray-400 font-body mb-2">{property.location}</p>
               <p className="text-gray-300 font-body text-sm mb-4">{property.description}</p>
+              <p className="text-gray-500 text-sm">
+                Posted: {new Date(property.created_at).toLocaleDateString()} at {new Date(property.created_at).toLocaleTimeString()}
+              </p>
             </div>
             <div className="text-right">
               <span className="text-2xl font-heading font-bold text-gold block mb-2">

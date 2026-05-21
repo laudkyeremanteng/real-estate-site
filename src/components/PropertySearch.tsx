@@ -7,7 +7,6 @@ export default function PropertySearch() {
     location: '',
     priceMin: '',
     priceMax: '',
-    bedrooms: '',
     propertyType: 'all'
   })
 
@@ -29,7 +28,7 @@ export default function PropertySearch() {
   return (
     <div className="bg-gray-900 rounded-xl p-6 border border-gold/20">
       <form onSubmit={handleSearch} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <label htmlFor="location" className="block text-sm font-body font-medium text-gray-300 mb-2">
               Location
@@ -73,26 +72,6 @@ export default function PropertySearch() {
               placeholder="5,000,000"
               className="w-full px-4 py-3 bg-black border border-gray-700 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
             />
-          </div>
-
-          <div>
-            <label htmlFor="bedrooms" className="block text-sm font-body font-medium text-gray-300 mb-2">
-              Bedrooms
-            </label>
-            <select
-              id="bedrooms"
-              name="bedrooms"
-              value={searchData.bedrooms}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-black border border-gray-700 text-white rounded-lg focus:outline-none focus:border-gold transition-colors font-body"
-            >
-              <option value="">Any</option>
-              <option value="1">1 Bedroom</option>
-              <option value="2">2 Bedrooms</option>
-              <option value="3">3 Bedrooms</option>
-              <option value="4">4 Bedrooms</option>
-              <option value="5">5+ Bedrooms</option>
-            </select>
           </div>
 
           <div>

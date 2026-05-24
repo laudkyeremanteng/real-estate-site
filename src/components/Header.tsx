@@ -35,11 +35,6 @@ export default function Header() {
               {/* Gold underline appears on hover */}
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
             </Link>
-            <Link href="/search" className="text-white font-body hover:text-gold transition-colors font-medium relative group">
-              Search
-              {/* Gold underline appears on hover */}
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-            </Link>
             <Link href="/properties" className="text-white font-body hover:text-gold transition-colors font-medium relative group">
               Properties
               {/* Gold underline appears on hover */}
@@ -74,11 +69,6 @@ export default function Header() {
             <div className="flex flex-col space-y-4">
               <Link href="/" className="text-white hover:text-gold transition-colors relative group">
                 Home
-                {/* Gold underline appears on hover */}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-              </Link>
-              <Link href="/search" className="text-white hover:text-gold transition-colors relative group">
-                Search
                 {/* Gold underline appears on hover */}
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
               </Link>

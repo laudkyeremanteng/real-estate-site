@@ -7,11 +7,11 @@
 // =================================================================
 
 import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans } from 'next/font/google'
+import { Sora } from 'next/font/google'
 import './globals.css'
 
-// Configure Plus Jakarta Sans font for headings
-const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ['latin'] })
+// Configure Sora font
+const sora = Sora({ subsets: ['latin'] })
 
 // Website metadata for SEO and browser display
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={plusJakartaSans.className}>{children}</body>
+      <body className={sora.className}>{children}</body>
     </html>
   )
 }

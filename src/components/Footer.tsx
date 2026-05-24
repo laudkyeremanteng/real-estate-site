@@ -67,6 +67,11 @@ export default function Footer() {
                   Contact Us
                 </Link>
               </li>
+              <li>
+                <Link href="/admin" className="text-gray-400 hover:text-gold transition-colors">
+                  Admin Dashboard
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -105,6 +110,11 @@ export default function Footer() {
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
               © {new Date().getFullYear()} Delta Homes Gh. All rights reserved.
             </p>
+
+            {/* Powered by LK Technologies - Desktop only */}
+            <p className="text-gray-400 text-sm mb-4 md:mb-0 hidden md:block">
+              Powered by LK Technologies
+            </p>
             
             {/* Legal links */}
             <div className="flex space-x-6">
@@ -115,6 +125,11 @@ export default function Footer() {
                 Terms of Service
               </Link>
             </div>
+
+            {/* Powered by LK Technologies - Mobile only */}
+            <p className="text-gray-400 text-sm mt-4 md:hidden">
+              Powered by LK Technologies
+            </p>
           </div>
         </div>
       </div>

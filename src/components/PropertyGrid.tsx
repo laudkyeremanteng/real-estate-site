@@ -54,12 +54,12 @@ export default function PropertyGrid() {
   }
 
   const PropertyCard = ({ key, property }: { key: string; property: Property }) => (
-    <div className="group bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gold/50 transition-all duration-300">
+    <div className="group bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gold/50 transition-all duration-300 hover:scale-102 hover:-translate-y-1">
       <div className="relative h-64 overflow-hidden">
-        <img 
-          src={property.media_urls?.[0] || property.image_url || 'https://via.placeholder.com/400x300?text=Property'} 
+        <img
+          src={property.media_urls?.[0] || property.image_url || 'https://via.placeholder.com/400x300?text=Property'}
           alt={property.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
         <div className="absolute bottom-4 left-4">
           <span className={`px-3 py-1 text-sm font-body font-semibold rounded-full ${
@@ -71,13 +71,13 @@ export default function PropertyGrid() {
           </span>
         </div>
       </div>
-      
+
       <div className="p-6">
         <h3 className="text-xl font-heading font-semibold text-white mb-2 group-hover:text-gold transition-colors">
           {property.title}
         </h3>
         <p className="text-gray-400 font-body mb-4">{property.location}</p>
-        
+
         <div className="mb-4">
           <span className="text-2xl font-heading font-bold text-gold">
             {property.currency === 'USD' ? '$' : 'GHS '} {property.price.toLocaleString()}
@@ -88,9 +88,9 @@ export default function PropertyGrid() {
           Posted: {new Date(property.created_at).toLocaleDateString()} at {new Date(property.created_at).toLocaleTimeString()}
         </p>
 
-        <Link 
+        <Link
           href={`/properties/${property.id}`}
-          className="block w-full bg-gold text-black py-2 font-body font-semibold text-center hover:bg-yellow-500 transition-colors rounded-lg"
+          className="block w-full bg-gold text-black py-2 font-body font-semibold text-center hover:bg-yellow-500 hover:scale-105 transition-all duration-300 rounded-lg"
         >
           View Details
         </Link>
@@ -99,16 +99,16 @@ export default function PropertyGrid() {
   )
 
   const PropertyListItem = ({ key, property }: { key: string; property: Property }) => (
-    <div className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gold/50 transition-all duration-300">
+    <div className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gold/50 transition-all duration-300 hover:scale-101 hover:-translate-y-0.5">
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/3 h-48 md:h-auto relative overflow-hidden">
-          <img 
-            src={property.media_urls?.[0] || property.image_url || 'https://via.placeholder.com/400x300?text=Property'} 
+          <img
+            src={property.media_urls?.[0] || property.image_url || 'https://via.placeholder.com/400x300?text=Property'}
             alt={property.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
         </div>
-        
+
         <div className="md:w-2/3 p-6">
           <div className="flex justify-between items-start mb-4">
             <div>
@@ -128,9 +128,9 @@ export default function PropertyGrid() {
             </div>
           </div>
 
-          <Link 
+          <Link
             href={`/properties/${property.id}`}
-            className="block w-full bg-gold text-black py-2 font-body font-semibold text-center hover:bg-yellow-500 transition-colors rounded-lg"
+            className="block w-full bg-gold text-black py-2 font-body font-semibold text-center hover:bg-yellow-500 hover:scale-105 transition-all duration-300 rounded-lg"
           >
             View Details
           </Link>

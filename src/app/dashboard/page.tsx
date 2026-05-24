@@ -7,6 +7,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { supabase } from '@/lib/supabase'
 import { getCurrentAgent, logoutAgent } from '@/lib/auth'
+import { uploadFiles, deleteFile } from '@/lib/storage'
 
 interface Property {
   id: string
@@ -289,7 +290,6 @@ function PropertyForm({ agentId, property, onSuccess, onCancel }: any) {
     if (mediaFiles.length > 0) {
       setUploading(true)
       try {
-        const { uploadFiles } = await import('@/lib/storage')
         mediaUrls = await uploadFiles(mediaFiles, agentId, property?.id)
       } catch (error) {
         console.error('Error uploading files:', error)

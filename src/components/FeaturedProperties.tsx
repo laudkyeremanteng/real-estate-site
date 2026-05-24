@@ -71,17 +71,19 @@ export default function FeaturedProperties() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {properties.map((property: Property) => (
-              
-              <div key={property.id} className="group relative overflow-hidden rounded-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-gold/20 hover:-translate-y-2">
+              <div
+                key={property.id}
+                className="group relative overflow-hidden rounded-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-gold/20 hover:-translate-y-2"
+              >
                 {/* Property image container */}
                 <div className="relative h-64 overflow-hidden">
                   {/* Property image with zoom effect on hover */}
-                  <img 
-                    src={property.media_urls?.[0] || property.image_url || 'https://via.placeholder.com/400x300?text=Property'} 
+                  <img
+                    src={property.media_urls?.[0] || property.image_url || 'https://via.placeholder.com/400x300?text=Property'}
                     alt={property.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  
+
                   {/* Featured badge */}
                   <div className="absolute top-4 right-4">
                     <span className="bg-gold text-black px-3 py-1 text-sm font-semibold">
@@ -89,17 +91,17 @@ export default function FeaturedProperties() {
                     </span>
                   </div>
                 </div>
-                
+
                 {/* Property details with background color change on hover */}
                 <div className="bg-gray-900 p-6 group-hover:bg-gray-800 transition-colors duration-300">
                   {/* Property title with gold color on hover */}
                   <h3 className="text-lg font-heading font-semibold text-white mb-2 group-hover:text-gold transition-colors">
                     {property.title}
                   </h3>
-                  
+
                   {/* Property location */}
                   <p className="text-gray-400 font-body text-sm mb-4">{property.location}</p>
-                  
+
                   {/* Price display */}
                   <div className="mb-4">
                     <span className="text-xl font-heading font-bold text-gold">
@@ -113,9 +115,9 @@ export default function FeaturedProperties() {
                   </p>
 
                   {/* Action button */}
-                  <Link 
+                  <Link
                     href={`/properties/${property.id}`}
-                    className="block w-full bg-gold text-black py-2 text-sm font-body font-semibold hover:bg-yellow-500 transition-colors rounded-lg text-center"
+                    className="block w-full bg-gold text-black py-2 text-sm font-body font-semibold hover:bg-yellow-500 hover:scale-105 transition-all duration-300 rounded-lg text-center"
                   >
                     View Details
                   </Link>

@@ -25,6 +25,20 @@ export default function RegisterPage() {
     setError('')
     setLoading(true)
 
+    // Validate phone number is exactly 10 digits
+    if (formData.phone.length !== 10 || !/^\d+$/.test(formData.phone)) {
+      setError('Phone number must be exactly 10 digits')
+      setLoading(false)
+      return
+    }
+
+    // Validate whatsapp number is exactly 10 digits
+    if (formData.whatsapp.length !== 10 || !/^\d+$/.test(formData.whatsapp)) {
+      setError('WhatsApp number must be exactly 10 digits')
+      setLoading(false)
+      return
+    }
+
     const result = await registerAgent(
       formData.email,
       formData.password,

@@ -16,7 +16,7 @@ export async function registerAgent(email: string, password: string, name: strin
     return { error: 'Failed to create user' }
   }
 
-  // 2. Insert agent data into agents table
+  // 2. Insert agent data into agents table with pending status
   const { error: agentError } = await supabase
     .from('agents')
     .insert({
@@ -26,6 +26,7 @@ export async function registerAgent(email: string, password: string, name: strin
       name,
       phone,
       whatsapp,
+      status: 'pending', // Set status to pending for approval
     })
 
   if (agentError) {
@@ -44,6 +45,29 @@ export async function loginAgent(email: string, password: string) {
 
   if (error) {
     return { error: error.message }
+  }
+
+  // Check if agent is approved
+  const { data: agent, error: agentError } = await supabase
+    .from('agents')
+    .select('status')
+    .eq('id', data.user.id)
+    .single()
+
+  if (agentError || !agent) {
+    return { error: 'Agent data not found' }
+  }
+
+  if (agent.status === 'rejected') {
+    // Sign out the user since they're rejected
+    await supabase.auth.signOut()
+    return { error: 'Your account has been rejected. Please contact support for more information.' }
+  }
+
+  if (agent.status === 'pending') {
+    // Sign out the user since they're pending approval
+    await supabase.auth.signOut()
+    return { error: 'Your account is pending approval. Please wait for admin approval.' }
   }
 
   return { success: true, user: data.user }
@@ -107,4 +131,26 @@ export async function updatePassword(newPassword: string) {
   }
 
   return { success: true }
+}
+
+// Admin login with passcode
+export async function loginAdminWithPasscode(passcode: string) {
+  // Define the admin passcode (in production, this should be in environment variables)
+  const ADMIN_PASSCODE = process.env.NEXT_PUBLIC_ADMIN_PASSCODE || 'admin123'
+
+  if (passcode !== ADMIN_PASSCODE) {
+    return { error: 'Invalid passcode' }
+  }
+
+  return { success: true }
+}
+
+// Check if admin is authenticated (always returns false to force re-authentication on every visit)
+export function isAdminAuthenticated() {
+  return false
+}
+
+// Admin logout (no-op since session is not persisted)
+export function logoutAdmin() {
+  // No-op since session is not persisted
 }

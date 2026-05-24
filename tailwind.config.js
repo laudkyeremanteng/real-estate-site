@@ -18,11 +18,11 @@ module.exports = {
         }
       },
       fontFamily: {
-        heading: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],  /* Brand consistency + luxury feel */
-        body: ['DM Sans', 'Inter', 'sans-serif'],     /* Current body + modern alternative */
-        luxury: ['Poppins', 'Inter', 'sans-serif'],    /* Elegant, attention-grabbing */
-        professional: ['Roboto', 'Inter', 'sans-serif'], /* Professional + fallback */
-        elegant: ['Poppins', 'Inter', 'sans-serif'],    /* Accent font + fallback */
+        heading: ['Sora', 'sans-serif'],
+        body: ['Sora', 'sans-serif'],
+        luxury: ['Sora', 'sans-serif'],
+        professional: ['Sora', 'sans-serif'],
+        elegant: ['Sora', 'sans-serif'],
       },
       fontWeight: {
         light: '300',

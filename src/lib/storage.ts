@@ -6,11 +6,16 @@ export async function uploadFile(file: File, agentId: string, propertyId?: strin
   const fileName = `${propertyId || 'temp'}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
   const filePath = `${agentId}/${fileName}`
 
+  console.log('Uploading file:', { fileName, filePath, fileSize: file.size, fileType: file.type })
+
   const { data, error } = await supabase.storage
     .from('property-media')
     .upload(filePath, file)
 
+  console.log('Upload result:', { data, error })
+
   if (error) {
+    console.error('Detailed upload error:', error)
     throw new Error(`Error uploading file: ${error.message}`)
   }
 
